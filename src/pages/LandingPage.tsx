@@ -72,6 +72,7 @@ export function LandingPage() {
     >
       <NucleusOrb
         phase={phase}
+        progress={progress}
         slotRef={slotRef}
         onFirstFrame={() => complete('first-frame')}
         onChunkReady={() => complete('three-chunk')}

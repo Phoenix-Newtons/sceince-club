@@ -57,6 +57,8 @@ const FLIGHT_EASE = [0.66, 0, 0.16, 1] as const;
 
 interface NucleusOrbProps {
   phase: OrbPhase;
+  /** 0 – 100 loading progress. Feeds the scene: ring speed, aura size, core energy. */
+  progress: number;
   /** Element the logo flies into (the header's brand slot). */
   slotRef: React.RefObject<HTMLElement | null>;
   /** Called once the first WebGL frame is on screen. */
@@ -73,7 +75,7 @@ interface NucleusOrbProps {
  * `LOGO_RENDER_SIZE` and CSS-scaled from full-screen down to the 40 px header
  * slot, so the transition is seamless and there is no resize thrash mid-flight.
  */
-export function NucleusOrb({ phase, slotRef, onFirstFrame, onChunkReady }: NucleusOrbProps) {
+export function NucleusOrb({ phase, progress, slotRef, onFirstFrame, onChunkReady }: NucleusOrbProps) {
   const reduced = useReducedMotion();
   const stateRef = useRef(createLogoState());
   const [frame, setFrame] = useState<Frame>(loadingFrame);
@@ -92,6 +94,11 @@ export function NucleusOrb({ phase, slotRef, onFirstFrame, onChunkReady }: Nucle
     window.addEventListener('pointermove', onMove, { passive: true });
     return () => window.removeEventListener('pointermove', onMove);
   }, [phase]);
+
+  /* --- live progress: this is what makes the logo *be* the loader --- */
+  useEffect(() => {
+    stateRef.current.progress = Math.min(1, Math.max(0, progress / 100));
+  }, [progress]);
 
   /* --- reveal energy: the logo "powers up" when loading completes --- */
   useEffect(() => {
@@ -120,11 +127,14 @@ export function NucleusOrb({ phase, slotRef, onFirstFrame, onChunkReady }: Nucle
   /* --- the flight itself --- */
   useEffect(() => {
     if (phase === 'loading') return;
+    let raf = 0;
+    let cancelled = false;
     const attempt = () => {
+      if (cancelled) return;
       const next = dockedFrame(slotRef.current);
       if (!next) {
         // Header slot not laid out yet — try again next frame.
-        requestAnimationFrame(attempt);
+        raf = requestAnimationFrame(attempt);
         return;
       }
       hasFlown.current = true;
@@ -135,6 +145,10 @@ export function NucleusOrb({ phase, slotRef, onFirstFrame, onChunkReady }: Nucle
       }
     };
     attempt();
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
   }, [phase, reduced, slotRef]);
 
   const handleChunk = useCallback(() => {
