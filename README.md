@@ -1,62 +1,83 @@
 # Nucleus — Science Club Portal
 
-A modern, highly engaging portal for the **BSSM Science Club** — built with React,
-TypeScript and Tailwind CSS. "Warm-academic meets high-tech lab."
+A modern, multi-page portal for the **BSSM Science Club** — React + TypeScript +
+Tailwind CSS, with a real backend, member accounts, and light/dark theming.
+"Warm-academic meets high-tech lab."
 
-![Stack](https://img.shields.io/badge/React-19-61dafb) ![TS](https://img.shields.io/badge/TypeScript-strict-3178c6) ![Tailwind](https://img.shields.io/badge/Tailwind-v4-38bdf8)
+Created by **Luwangula Alpha** · [alphaluwangula@proton.me](mailto:alphaluwangula@proton.me)
 
-## Features
+## Pages
 
-- **Sticky navbar** — brand logo, section links with scroll-spy, live "100+ Members
-  Active" badge, Join Club CTA and a fully responsive mobile drawer.
-- **Hero** — two-column split with an animated, interactive molecular-network
-  `<canvas>` illustration, stats strip and twin action buttons.
-- **Feature grid** — six club domains (Physics, Astronomy, Chemistry, Robotics,
-  Bio-Engineering, Quantum) as hover-lift cards with soft-icon wrappers.
-- **Projects & timeline tracker** — filter tabs (All / Robotics / Eco-Science /
-  Space), progress bars, milestone timelines and contributor avatar stacks.
-- **Announcement board** — featured fair banner plus notices with contextual
-  `Live` / `Upcoming` / `Registration Open` status badges and interactive actions.
-- **Join Us modal** — fully validated application form (inline errors, loading
-  spinner, animated success state) with Escape / backdrop dismissal.
-- **Footer** — multi-column links, socials, contact details and a working
-  newsletter signup with its own validation + loading state.
+| Route       | What's on it                                                            |
+| ----------- | ----------------------------------------------------------------------- |
+| `/`         | Moving-starfield hero, club domains, rotating university-level facts, CTA |
+| `/events`   | Featured event banner + notice board with Live/Upcoming/Registration badges |
+| `/projects` | Filterable project tracker (Robotics / Eco-Science / Space) with timelines; members can publish projects |
+| `/gallery`  | Visual highlights from the lab                                           |
+| `/about`    | Mission, values, the live club quote, partners                           |
+| `/admin`    | Sign-in + applications, member registration, projects, quotes, facts, notices management |
+
+## Real data — no mocks
+
+The frontend contains **zero hardcoded content**. Everything (projects, notices,
+quotes, did-you-knows, members, applications, subscribers) is served by the
+Express API and persisted to `server/data/db.json`. A fresh database is seeded
+automatically on first boot and is fully editable/deletable from the admin panel.
+
+**Default admin account** (seeded):
+
+- Email: `alphaluwangula@proton.me`
+- Password: `Nucleus-2026!` (override with the `ADMIN_PASSWORD` env var before first boot)
+
+> Change this password for any real deployment — members are created from the
+> admin panel or approved from public applications.
+
+## Auth & roles
+
+- **Visitors** can browse everything and submit join applications / newsletter signups.
+- **Members** (signed in) can publish projects, add quotes and add did-you-knows.
+- **Admins** can additionally register/remove members, approve or reject
+  applications (issuing temporary passwords), post featured notices, and delete content.
+
+Sessions are token-based (7-day expiry); passwords are scrypt-hashed.
 
 ## Tech stack
 
-| Layer      | Choice                                       |
-| ---------- | -------------------------------------------- |
-| Framework  | React 19 (function components + hooks only)  |
-| Language   | TypeScript (strict, `verbatimModuleSyntax`)  |
-| Styling    | Tailwind CSS v4 (semantic `primary`/`accent` tokens) |
-| Icons      | lucide-react                                 |
-| Build      | Vite 7                                       |
-| Font       | Inter Variable (self-hosted via Fontsource)  |
+| Layer      | Choice                                              |
+| ---------- | --------------------------------------------------- |
+| Frontend   | React 19 (function components + hooks), React Router v7 |
+| Language   | TypeScript (strict, `verbatimModuleSyntax`)          |
+| Styling    | Tailwind CSS v4 — light **and** dark mode (class strategy) |
+| Icons      | lucide-react                                         |
+| Backend    | Express 5 + JSON file store (`server/data/db.json`)  |
+| Font       | Inter Variable (self-hosted)                         |
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev      # start dev server on :5173
-npm run build    # type-check + production build
-npm run preview  # preview the production build
+npm run server   # API on http://localhost:4000 (seeds the DB on first run)
+npm run dev      # frontend on http://localhost:5173 (proxies /api → :4000)
 ```
+
+Production: `npm run build` then `npm run server` — the API also serves `dist/`
+with SPA fallback, so one process serves everything.
 
 ## Project structure
 
 ```
-src/
-├── components/
-│   ├── atoms/        # Button, Badge, Avatar, ProgressBar, Container, Reveal…
-│   ├── molecules/    # FeatureCard, ProjectCard, NoticeCard, FormField, TimelineStrip…
-│   └── organisms/    # Navbar, Hero, HeroCanvas, ProjectsSection, JoinModal, Footer…
-├── context/          # JoinModal context (open/close state shared app-wide)
-├── data/             # Typed content: features, projects, notices, gallery…
-├── hooks/            # useScrollSpy, useLockBodyScroll
-├── lib/              # Accent styles, validation helpers
-└── types/            # Shared strict types (Project, Notice, Feature, Contributor…)
+├── server/            # Express API, JSON store, seeding, scrypt auth
+└── src/
+    ├── api/           # Typed fetch client (token handling)
+    ├── components/
+    │   ├── atoms/     # Button, Badge, Avatar, Skeleton, ThemeToggle…
+    │   ├── molecules/ # Cards, form fields, avatar stacks, timelines…
+    │   ├── organisms/ # Navbar, Hero + StarfieldCanvas, sections, modals…
+    │   └── admin/     # Login + six admin panels
+    ├── context/       # Theme (light/dark), Auth, JoinModal
+    ├── data/          # Static editorial content (features, gallery, values)
+    ├── hooks/         # useApi, useLockBodyScroll
+    ├── lib/           # Accent styles, validation
+    ├── pages/         # Home, Events, Projects, Gallery, About, Admin, 404
+    └── types/         # Shared strict types
 ```
-
----
-
-Made with ♥ by students, for students.

@@ -7,7 +7,7 @@ export function FeatureCard({ feature }: { feature: Feature }) {
   const accent = ACCENTS[feature.accent];
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary-200/70 hover:shadow-lift">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary-200/70 hover:shadow-lift dark:border-slate-700/60 dark:bg-slate-900 dark:hover:border-primary-500/40">
       {/* gradient accent line, revealed on hover */}
       <span
         aria-hidden="true"
@@ -20,13 +20,13 @@ export function FeatureCard({ feature }: { feature: Feature }) {
           <Icon className="h-6 w-6" aria-hidden="true" />
         </span>
         <ArrowUpRight
-          className="h-5 w-5 text-slate-300 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary-500"
+          className="h-5 w-5 text-slate-300 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary-500 dark:text-slate-600"
           aria-hidden="true"
         />
       </div>
-      <h3 className="mt-5 text-lg font-bold tracking-tight text-slate-900">{feature.title}</h3>
-      <p className="mb-4 mt-2 text-sm leading-relaxed text-slate-500">{feature.description}</p>
-      <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 text-xs font-semibold text-slate-400 [margin-top:auto]">
+      <h3 className="mt-5 text-lg font-bold tracking-tight text-slate-900 dark:text-white">{feature.title}</h3>
+      <p className="mb-4 mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{feature.description}</p>
+      <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 text-xs font-semibold text-slate-400 dark:border-slate-800 dark:text-slate-500">
         <span className="inline-flex items-center gap-1.5">
           <Users className="h-3.5 w-3.5 text-primary-500" aria-hidden="true" />
           {feature.membersActive} active members

@@ -6,10 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Nucleus is the BSSM Science Club portal — research projects, lab workshops, star parties and robotics competitions for 100+ student scientists."
+      content="Nucleus is the BSSM Science Club portal — research projects, lab workshops, star parties and robotics competitions for student scientists."
     />
+    <meta name="author" content="Luwangula Alpha" />
     <meta name="theme-color" content="#4f46e5" />
     <title>Nucleus — BSSM Science Club</title>
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of light mode.
+      (function () {
+        try {
+          if (localStorage.getItem('nucleus_theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

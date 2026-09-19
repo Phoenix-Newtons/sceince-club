@@ -11,5 +11,11 @@ export default defineConfig({
     strictPort: true,
     // The app is previewed behind a sandbox proxy host — accept it.
     allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+      },
+    },
   },
 });

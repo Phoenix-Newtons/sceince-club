@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
 
+/* Class-based dark mode: `html.dark` drives every dark: variant. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -31,10 +34,6 @@
   --color-accent-800: #155e75;
   --color-accent-900: #164e63;
   --color-accent-950: #083344;
-
-  /* Semantic surfaces */
-  --color-surface: #ffffff;
-  --color-surface-muted: #f8fafc;
 
   /* Elevation tokens */
   --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
@@ -67,15 +66,21 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5.5rem;
     -webkit-text-size-adjust: 100%;
   }
+  html.dark {
+    color-scheme: dark;
+  }
   body {
-    background-color: var(--color-surface);
+    background-color: #ffffff;
     color: var(--color-slate-600);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+  .dark body {
+    background-color: #020617;
+    color: var(--color-slate-400);
   }
   ::selection {
     background-color: var(--color-primary-600);

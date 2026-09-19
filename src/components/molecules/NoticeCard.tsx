@@ -19,18 +19,20 @@ export function NoticeCard({ notice }: { notice: Notice }) {
   const meta = STATUS_META[notice.status];
 
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-200/70 hover:shadow-lift">
+    <article className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary-200/70 hover:shadow-lift dark:border-slate-700/60 dark:bg-slate-900 dark:hover:border-primary-500/40">
       <div className="flex items-center justify-between gap-3">
         <Badge tone={meta.tone} dot pulse={meta.pulse}>
           {meta.label}
         </Badge>
-        <span className="text-xs font-semibold text-slate-400">{notice.dateLabel}</span>
+        <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">{notice.dateLabel}</span>
       </div>
 
-      <h3 className="mt-4 text-base font-bold leading-snug tracking-tight text-slate-900">{notice.title}</h3>
-      <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{notice.description}</p>
+      <h3 className="mt-4 text-base font-bold leading-snug tracking-tight text-slate-900 dark:text-white">
+        {notice.title}
+      </h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{notice.description}</p>
 
-      <ul className="mb-5 mt-4 space-y-2 text-xs font-medium text-slate-500">
+      <ul className="mb-5 mt-4 space-y-2 text-xs font-medium text-slate-500 dark:text-slate-400">
         <li className="flex items-center gap-2">
           <CalendarDays className="h-3.5 w-3.5 shrink-0 text-primary-500" aria-hidden="true" />
           {notice.dateLabel}
@@ -45,11 +47,11 @@ export function NoticeCard({ notice }: { notice: Notice }) {
         </li>
       </ul>
 
-      <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+      <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-100 pt-4 dark:border-slate-800">
         {notice.status === 'registration' ? (
           <>
-            <span className="text-xs font-bold text-emerald-600">
-              {notice.seatsLeft} bench seats left
+            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+              {notice.seatsLeft ?? 'Open'} {notice.seatsLeft ? 'bench seats left' : 'to all members'}
             </span>
             <Button size="sm" onClick={open}>
               Register
@@ -57,7 +59,7 @@ export function NoticeCard({ notice }: { notice: Notice }) {
           </>
         ) : notice.status === 'live' ? (
           <>
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 dark:text-slate-500">
               <Users className="h-3.5 w-3.5" aria-hidden="true" />
               {watching} watching
             </span>
@@ -81,16 +83,16 @@ export function NoticeCard({ notice }: { notice: Notice }) {
           </>
         ) : (
           <>
-            <span className="text-xs font-medium text-slate-400">Open to all members</span>
+            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Open to all members</span>
             <Button
               size="sm"
               variant={reminded ? 'secondary' : 'ghost'}
-              className={reminded ? '' : 'text-slate-500 ring-1 ring-slate-200 hover:text-slate-900'}
+              className={reminded ? '' : 'text-slate-500 ring-1 ring-slate-200 hover:text-slate-900 dark:text-slate-300 dark:ring-slate-700 dark:hover:text-white'}
               onClick={() => setReminded((prev) => !prev)}
             >
               {reminded ? (
                 <>
-                  <BellRing className="h-4 w-4 text-primary-600" aria-hidden="true" />
+                  <BellRing className="h-4 w-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
                   Reminder set
                 </>
               ) : (

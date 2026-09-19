@@ -1,5 +1,6 @@
 import { CircleCheck, LoaderCircle, Send } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
+import { api } from '../../api/client';
 import { isValidEmail } from '../../lib/validation';
 import { Button } from '../atoms/Button';
 
@@ -8,15 +9,23 @@ type Status = 'idle' | 'error' | 'submitting' | 'success';
 export function NewsletterForm() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<Status>('idle');
+  const [error, setError] = useState<string>('');
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!isValidEmail(email)) {
       setStatus('error');
+      setError("That email doesn't look right — mind checking it?");
       return;
     }
     setStatus('submitting');
-    window.setTimeout(() => setStatus('success'), 1100);
+    try {
+      await api<void>('/subscribe', { method: 'POST', body: { email } });
+      setStatus('success');
+    } catch (err) {
+      setStatus('error');
+      setError(err instanceof Error ? err.message : 'Subscription failed — try again.');
+    }
   };
 
   if (status === 'success') {
@@ -63,7 +72,7 @@ export function NewsletterForm() {
       </div>
       {status === 'error' ? (
         <p id="newsletter-error" className="mt-2 animate-fade-in text-xs font-medium text-rose-400">
-          That email doesn't look right — mind checking it?
+          {error}
         </p>
       ) : null}
     </form>

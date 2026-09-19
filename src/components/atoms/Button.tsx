@@ -10,9 +10,10 @@ const VARIANTS: Record<ButtonVariant, string> = {
   primary:
     'bg-primary-600 text-white shadow-sm hover:-translate-y-0.5 hover:bg-primary-500 hover:shadow-lift active:translate-y-0 active:shadow-sm',
   secondary:
-    'bg-white text-slate-700 shadow-sm ring-1 ring-slate-200 hover:-translate-y-0.5 hover:text-primary-700 hover:shadow-md hover:ring-primary-300 active:translate-y-0',
-  ghost: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-  dark: 'bg-slate-900 text-white shadow-sm hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0',
+    'bg-white text-slate-700 shadow-sm ring-1 ring-slate-200 hover:-translate-y-0.5 hover:text-primary-700 hover:shadow-md hover:ring-primary-300 active:translate-y-0 dark:bg-slate-800/90 dark:text-slate-200 dark:ring-slate-700 dark:hover:text-primary-300 dark:hover:ring-primary-500/40',
+  ghost:
+    'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white',
+  dark: 'bg-slate-900 text-white shadow-sm hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200',
 };
 
 const SIZES: Record<ButtonSize, string> = {

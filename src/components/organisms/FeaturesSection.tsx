@@ -6,7 +6,7 @@ import { SectionHeading } from '../molecules/SectionHeading';
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="bg-surface-muted py-16 sm:py-24">
+    <section className="bg-slate-50 py-16 sm:py-24 dark:bg-slate-900/40">
       <Container>
         <Reveal>
           <SectionHeading

@@ -12,8 +12,8 @@ export function ProgressBar({ value, label, tone = 'brand', className = '' }: Pr
     <div className={className}>
       {label ? (
         <div className="mb-1.5 flex items-center justify-between text-xs font-semibold">
-          <span className="text-slate-500">{label}</span>
-          <span className="tabular-nums text-slate-700">{clamped}%</span>
+          <span className="text-slate-500 dark:text-slate-400">{label}</span>
+          <span className="tabular-nums text-slate-700 dark:text-slate-200">{clamped}%</span>
         </div>
       ) : null}
       <div
@@ -22,7 +22,7 @@ export function ProgressBar({ value, label, tone = 'brand', className = '' }: Pr
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={label ?? 'Progress'}
-        className="h-2 w-full overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-900/5"
+        className="h-2 w-full overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-900/5 dark:bg-slate-800 dark:ring-white/5"
       >
         <div
           className={`h-full rounded-full bg-gradient-to-r transition-[width] duration-700 ease-out ${

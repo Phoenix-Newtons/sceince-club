@@ -3,7 +3,7 @@ import type { GalleryTileData } from '../../types';
 export function GalleryTile({ tile }: { tile: GalleryTileData }) {
   const Icon = tile.icon;
   return (
-    <figure className="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-card ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift">
+    <figure className="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-card ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift dark:ring-white/10">
       <div
         className={`absolute inset-0 bg-gradient-to-br ${tile.gradient} transition-transform duration-500 group-hover:scale-105`}
       />

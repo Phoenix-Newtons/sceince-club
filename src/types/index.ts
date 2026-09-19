@@ -1,8 +1,28 @@
 import type { LucideIcon } from 'lucide-react';
 
-/* ---------- Navigation ---------- */
+/* ---------- Auth / members ---------- */
 
-export type SectionId = 'home' | 'events' | 'projects' | 'gallery' | 'about';
+export type Role = 'admin' | 'member';
+
+export interface Member {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  createdAt: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  member: Member;
+}
+
+export interface Stats {
+  members: number;
+  projects: number;
+  facts: number;
+  notices: number;
+}
 
 /* ---------- Shared accent palette keys ---------- */
 
@@ -35,7 +55,6 @@ export interface Milestone {
   label: string;
   date: string;
   done: boolean;
-  /** The milestone currently being worked on */
   current?: boolean;
 }
 
@@ -55,31 +74,85 @@ export interface Project {
   updatedAt: string;
 }
 
+export interface ProjectDraft {
+  title: string;
+  category: ProjectCategory;
+  status: ProjectStatus;
+  progress: number;
+  summary: string;
+  leadName: string;
+  tags: string[];
+}
+
 /* ---------- Announcements / notices ---------- */
 
 export type NoticeStatus = 'live' | 'upcoming' | 'registration';
 
 export interface Notice {
   id: string;
+  featured?: boolean;
   status: NoticeStatus;
   title: string;
   description: string;
   dateLabel: string;
   timeLabel: string;
   location: string;
-  /** Seats remaining (status: registration) */
   seatsLeft?: number;
-  /** Current viewer count (status: live) */
   watching?: number;
 }
 
-/* ---------- Hero / misc ---------- */
-
-export interface HeroStat {
-  id: string;
-  value: string;
-  label: string;
+export interface NoticeDraft {
+  title: string;
+  description: string;
+  status: NoticeStatus;
+  dateLabel: string;
+  timeLabel: string;
+  location: string;
+  featured: boolean;
 }
+
+/* ---------- Quotes ---------- */
+
+export interface Quote {
+  id: string;
+  text: string;
+  author: string;
+  role: string;
+  active: boolean;
+  createdAt: string;
+}
+
+/* ---------- Did-you-know facts ---------- */
+
+export interface Fact {
+  id: string;
+  fact: string;
+  topic: string;
+  createdAt: string;
+}
+
+/* ---------- Applications & subscribers ---------- */
+
+export type ApplicationStatus = 'pending' | 'approved' | 'rejected';
+
+export interface Application {
+  id: string;
+  name: string;
+  email: string;
+  grade: string;
+  interest: string;
+  message: string;
+  status: ApplicationStatus;
+  createdAt: string;
+}
+
+export interface Subscriber {
+  id: string;
+  email: string;
+  createdAt: string;
+}
+
+/* ---------- Static editorial content ---------- */
 
 export interface GalleryTileData {
   id: string;

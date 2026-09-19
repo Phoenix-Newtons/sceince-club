@@ -17,11 +17,11 @@ interface FieldChrome {
 
 function controlClasses(error?: string, touched?: boolean): string {
   const base =
-    'w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm transition-colors duration-200 placeholder:text-slate-400 focus:outline-none focus:ring-4';
+    'w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm transition-colors duration-200 placeholder:text-slate-400 focus:outline-none focus:ring-4 dark:bg-slate-950/60 dark:text-slate-100 dark:placeholder:text-slate-500';
   const invalid = Boolean(error && touched);
   return invalid
-    ? `${base} border-rose-300 focus:border-rose-400 focus:ring-rose-100`
-    : `${base} border-slate-200 hover:border-slate-300 focus:border-primary-400 focus:ring-primary-100`;
+    ? `${base} border-rose-300 focus:border-rose-400 focus:ring-rose-100 dark:border-rose-500/50 dark:focus:ring-rose-500/10`
+    : `${base} border-slate-200 hover:border-slate-300 focus:border-primary-400 focus:ring-primary-100 dark:border-slate-700 dark:hover:border-slate-600 dark:focus:border-primary-500 dark:focus:ring-primary-500/20`;
 }
 
 function FieldShell({
@@ -36,22 +36,22 @@ function FieldShell({
   const invalid = Boolean(error && touched);
   return (
     <div className="space-y-1.5 text-left">
-      <label htmlFor={id} className="block text-sm font-semibold text-slate-700">
+      <label htmlFor={id} className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
         {label}
         {required ? (
-          <span className="ml-0.5 text-primary-600" aria-hidden="true">
+          <span className="ml-0.5 text-primary-600 dark:text-primary-400" aria-hidden="true">
             *
           </span>
         ) : null}
       </label>
       {children}
       {invalid ? (
-        <p id={`${id}-error`} className="flex animate-fade-in items-center gap-1 text-xs font-medium text-rose-600">
+        <p id={`${id}-error`} className="flex animate-fade-in items-center gap-1 text-xs font-medium text-rose-600 dark:text-rose-400">
           <CircleAlert className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           {error}
         </p>
       ) : hint ? (
-        <p className="text-xs text-slate-400">{hint}</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500">{hint}</p>
       ) : null}
     </div>
   );
@@ -121,14 +121,14 @@ export function SelectField({
           required={required}
           aria-invalid={Boolean(error && touched)}
           aria-describedby={error && touched ? `${id}-error` : undefined}
-          className={`${controlClasses(error, touched)} appearance-none pr-10 ${value === '' ? 'text-slate-400' : ''}`}
+          className={`${controlClasses(error, touched)} appearance-none pr-10 ${value === '' ? 'text-slate-400 dark:text-slate-500' : ''}`}
           {...rest}
         >
           <option value="" disabled>
             {placeholder}
           </option>
           {options.map((option) => (
-            <option key={option.value} value={option.value} className="text-slate-800">
+            <option key={option.value} value={option.value} className="text-slate-800 dark:text-slate-100">
               {option.label}
             </option>
           ))}

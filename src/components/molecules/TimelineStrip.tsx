@@ -16,18 +16,23 @@ export function TimelineStrip({ milestones, className = '' }: TimelineStripProps
           {i > 0 ? (
             <div className="mt-2 h-0.5 min-w-[6px] flex-1" aria-hidden="true">
               <div
-                className={`h-full w-full rounded-full ${milestone.done ? 'bg-primary-500' : 'bg-slate-200'}`}
+                className={`h-full w-full rounded-full ${
+                  milestone.done ? 'bg-primary-500' : 'bg-slate-200 dark:bg-slate-700'
+                }`}
               />
             </div>
           ) : null}
-          <div className="flex w-12 shrink-0 flex-col items-center gap-1.5 sm:w-14" title={`${milestone.label} — ${milestone.date}`}>
+          <div
+            className="flex w-12 shrink-0 flex-col items-center gap-1.5 sm:w-14"
+            title={`${milestone.label} — ${milestone.date}`}
+          >
             <span
               className={`flex h-[18px] w-[18px] items-center justify-center rounded-full transition-colors duration-300 ${
                 milestone.done
                   ? 'bg-primary-600 text-white'
                   : milestone.current
-                    ? 'bg-white ring-2 ring-primary-500'
-                    : 'bg-slate-200'
+                    ? 'bg-white ring-2 ring-primary-500 dark:bg-slate-900'
+                    : 'bg-slate-200 dark:bg-slate-700'
               }`}
             >
               {milestone.done ? (
@@ -38,7 +43,9 @@ export function TimelineStrip({ milestones, className = '' }: TimelineStripProps
             </span>
             <span
               className={`text-center text-[10px] font-bold leading-tight ${
-                milestone.done || milestone.current ? 'text-slate-700' : 'text-slate-400'
+                milestone.done || milestone.current
+                  ? 'text-slate-700 dark:text-slate-300'
+                  : 'text-slate-400 dark:text-slate-500'
               }`}
             >
               {milestone.label}

@@ -25,12 +25,6 @@ export const VALUES: AboutValue[] = [
   },
 ];
 
-export const ADVISOR_QUOTE = {
-  text: 'The best experiments start with a question nobody in the room has asked yet. Our job is to keep the room full of those questions.',
-  author: 'Dr. Hannah Cho',
-  role: 'Faculty Advisor · Physics',
-} as const;
-
 export const PARTNERS: string[] = [
   'City University Physics Dept.',
   'Ridge Observatory',

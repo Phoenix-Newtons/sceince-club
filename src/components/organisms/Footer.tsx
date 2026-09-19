@@ -1,4 +1,5 @@
 import { Atom, Github, Heart, Instagram, Linkedin, Mail, MapPin, Phone, Youtube, type LucideIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { FEATURES } from '../../data/features';
 import { NAV_LINKS } from '../../data/navigation';
 import { Container } from '../atoms/Container';
@@ -18,16 +19,19 @@ const SOCIALS: SocialLink[] = [
   { id: 'linkedin', label: 'Nucleus on LinkedIn', href: 'https://linkedin.com/company/nucleus-bssm', icon: Linkedin },
 ];
 
-const FOOTNOTES = ['Privacy', 'Terms', 'Code of Conduct'];
+export const CREATOR = {
+  name: 'Luwangula Alpha',
+  email: 'alphaluwangula@proton.me',
+} as const;
 
 export function Footer() {
   return (
-    <footer className="bg-slate-950 text-slate-400">
+    <footer className="border-t border-transparent bg-slate-950 text-slate-400 dark:border-slate-800">
       <Container className="py-14 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-12">
           {/* Brand */}
           <div className="lg:col-span-4">
-            <a href="#home" className="inline-flex items-center gap-2.5" aria-label="Nucleus — back to top">
+            <Link to="/" className="inline-flex items-center gap-2.5" aria-label="Nucleus — home">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-accent-500 text-white">
                 <Atom className="h-5 w-5" aria-hidden="true" />
               </span>
@@ -37,7 +41,7 @@ export function Footer() {
                   BSSM Science Club
                 </span>
               </span>
-            </a>
+            </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
               A student-run science club at BSSM. We run the labs, launch the rockets and publish the data —
               come build with us.
@@ -66,10 +70,10 @@ export function Footer() {
             <h3 className="text-xs font-bold uppercase tracking-widest text-white">Explore</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               {NAV_LINKS.map((link) => (
-                <li key={link.id}>
-                  <a href={`#${link.id}`} className="transition-colors duration-200 hover:text-white">
+                <li key={link.to}>
+                  <Link to={link.to} className="transition-colors duration-200 hover:text-white">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -81,9 +85,9 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm">
               {FEATURES.map((feature) => (
                 <li key={feature.id}>
-                  <a href="#features" className="transition-colors duration-200 hover:text-white">
+                  <Link to="/about" className="transition-colors duration-200 hover:text-white">
                     {feature.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -130,16 +134,24 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs sm:flex-row">
           <p>© {new Date().getFullYear()} Nucleus — BSSM Science Club. All rights reserved.</p>
-          <div className="flex items-center gap-5">
-            {FOOTNOTES.map((item) => (
-              <a key={item} href="#home" className="transition-colors duration-200 hover:text-slate-300">
-                {item}
-              </a>
-            ))}
-          </div>
-          <p className="inline-flex items-center gap-1.5">
-            Built with <Heart className="h-3.5 w-3.5 fill-rose-500 text-rose-500" aria-hidden="true" /> by students,
-            for students
+          <p className="inline-flex flex-wrap items-center justify-center gap-1.5">
+            Created with
+            <Heart className="h-3.5 w-3.5 fill-rose-500 text-rose-500" aria-hidden="true" />
+            by{' '}
+            <a
+              href={`mailto:${CREATOR.email}`}
+              className="font-bold text-slate-200 transition-colors duration-200 hover:text-accent-300"
+            >
+              {CREATOR.name}
+            </a>
+            <span aria-hidden="true">·</span>
+            <a
+              href={`mailto:${CREATOR.email}`}
+              className="inline-flex items-center gap-1 text-slate-400 transition-colors duration-200 hover:text-accent-300"
+            >
+              <Mail className="h-3 w-3" aria-hidden="true" />
+              {CREATOR.email}
+            </a>
           </p>
         </div>
       </Container>

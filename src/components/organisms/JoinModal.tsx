@@ -1,5 +1,6 @@
 import { Rocket, ShieldCheck, X } from 'lucide-react';
 import { useEffect, useState, type FormEvent } from 'react';
+import { api } from '../../api/client';
 import { useJoinModal } from '../../context/JoinModalContext';
 import { useLockBodyScroll } from '../../hooks/useLockBodyScroll';
 import { isValidEmail } from '../../lib/validation';
@@ -19,6 +20,10 @@ type JoinFormErrors = Partial<Record<keyof JoinFormValues, string>>;
 type FieldTouched = Partial<Record<keyof JoinFormValues, boolean>>;
 type SubmitStatus = 'idle' | 'submitting' | 'success';
 
+interface ApplicationResponse {
+  id: string;
+}
+
 const GRADE_OPTIONS = [
   { value: 'grade-9', label: 'Grade 9' },
   { value: 'grade-10', label: 'Grade 10' },
@@ -27,12 +32,12 @@ const GRADE_OPTIONS = [
 ];
 
 const INTEREST_OPTIONS = [
-  { value: 'physics', label: 'Physics Lab' },
-  { value: 'astronomy', label: 'Astronomy & Astrophysics' },
-  { value: 'chemistry', label: 'Molecular Chemistry' },
-  { value: 'robotics', label: 'Robotics Experiments' },
-  { value: 'bio', label: 'Bio Engineering' },
-  { value: 'quantum', label: 'Quantum Computing' },
+  { value: 'Physics Lab', label: 'Physics Lab' },
+  { value: 'Astronomy & Astrophysics', label: 'Astronomy & Astrophysics' },
+  { value: 'Molecular Chemistry', label: 'Molecular Chemistry' },
+  { value: 'Robotics Experiments', label: 'Robotics Experiments' },
+  { value: 'Bio Engineering', label: 'Bio Engineering' },
+  { value: 'Quantum Computing', label: 'Quantum Computing' },
 ];
 
 const INITIAL_VALUES: JoinFormValues = { name: '', email: '', grade: '', interest: '', message: '' };
@@ -81,6 +86,7 @@ export function JoinModal() {
   const [touched, setTouched] = useState<FieldTouched>({});
   const [status, setStatus] = useState<SubmitStatus>('idle');
   const [applicationId, setApplicationId] = useState('');
+  const [serverError, setServerError] = useState<string | null>(null);
 
   useLockBodyScroll(isOpen);
 
@@ -91,6 +97,7 @@ export function JoinModal() {
     setErrors({});
     setTouched({});
     setStatus('idle');
+    setServerError(null);
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close();
     };
@@ -111,18 +118,22 @@ export function JoinModal() {
     setErrors(validate(values));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
     setTouched({ name: true, email: true, grade: true, interest: true, message: true });
     if (Object.keys(nextErrors).length > 0) return;
     setStatus('submitting');
-    // Simulated network round-trip — swap for a real POST when the API lands.
-    window.setTimeout(() => {
-      setApplicationId(`NCL-26-${Math.floor(100 + Math.random() * 900)}`);
+    setServerError(null);
+    try {
+      const created = await api<ApplicationResponse>('/applications', { method: 'POST', body: values });
+      setApplicationId(created.id);
       setStatus('success');
-    }, 1400);
+    } catch (err) {
+      setStatus('idle');
+      setServerError(err instanceof Error ? err.message : 'Submission failed — please try again.');
+    }
   };
 
   const firstName = values.name.trim().split(' ')[0] || 'scientist';
@@ -138,16 +149,18 @@ export function JoinModal() {
       <div className="absolute inset-0 animate-fade-in bg-slate-950/60 backdrop-blur-sm" onClick={close} aria-hidden="true" />
 
       {/* Panel */}
-      <div className="relative flex max-h-[92dvh] w-full max-w-lg animate-scale-in flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl">
+      <div className="relative flex max-h-[92dvh] w-full max-w-lg animate-scale-in flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl dark:bg-slate-900">
         {status === 'success' ? (
           <div className="flex flex-col items-center px-8 py-12 text-center">
             <SuccessCheck />
-            <h2 className="mt-6 text-2xl font-extrabold tracking-tight text-slate-900">Application received!</h2>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-500">
-              Nice one, <span className="font-semibold text-slate-700">{firstName}</span>. We'll email{' '}
-              <span className="font-semibold text-slate-700">{values.email}</span> with your interview slot within
-              a week. Applicant ID:{' '}
-              <span className="font-mono font-semibold text-primary-700">{applicationId}</span>
+            <h2 className="mt-6 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Application received!
+            </h2>
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              Nice one, <span className="font-semibold text-slate-700 dark:text-slate-200">{firstName}</span>. We'll email{' '}
+              <span className="font-semibold text-slate-700 dark:text-slate-200">{values.email}</span> once an admin reviews
+              your application. Applicant ID:{' '}
+              <span className="font-mono font-semibold text-primary-700 dark:text-primary-300">{applicationId}</span>
             </p>
             <Button size="lg" className="mt-8 w-full" onClick={close}>
               Done
@@ -156,15 +169,17 @@ export function JoinModal() {
         ) : (
           <>
             {/* Header */}
-            <div className="flex items-center gap-4 border-b border-slate-100 px-6 py-5">
+            <div className="flex items-center gap-4 border-b border-slate-100 px-6 py-5 dark:border-slate-800">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-600 to-accent-500 text-white shadow-md shadow-primary-600/25">
                 <Rocket className="h-5 w-5" aria-hidden="true" />
               </span>
               <div className="min-w-0">
-                <h2 id="join-title" className="text-lg font-extrabold tracking-tight text-slate-900">
+                <h2 id="join-title" className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">
                   Join the club
                 </h2>
-                <p className="truncate text-sm text-slate-500">Fall 2026 applications close October 10.</p>
+                <p className="truncate text-sm text-slate-500 dark:text-slate-400">
+                  Fall 2026 applications are reviewed every Friday.
+                </p>
               </div>
               <IconButton label="Close dialog" className="ml-auto" onClick={close}>
                 <X className="h-5 w-5" aria-hidden="true" />
@@ -237,10 +252,16 @@ export function JoinModal() {
                 onChange={(e) => setField('message')(e.target.value)}
               />
 
+              {serverError ? (
+                <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
+                  {serverError}
+                </p>
+              ) : null}
+
               <div className="space-y-3 pt-1">
-                <p className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                <p className="flex items-center gap-1.5 text-xs font-medium text-slate-400 dark:text-slate-500">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
-                  We review applications every Friday — no experience required.
+                  No experience required — admins approve applications weekly.
                 </p>
                 <Button type="submit" size="lg" className="w-full" disabled={status === 'submitting'}>
                   {status === 'submitting' ? 'Submitting application…' : 'Submit application'}
