@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Nucleus — the BSSM Science Club portal. React + TypeScript + Tailwind CSS.",
+  "description": "Nucleus \u2014 the BSSM Science Club portal. React + TypeScript + Tailwind CSS.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -12,16 +12,21 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.5",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@react-three/fiber": "^9.7.0",
     "express": "^5.2.1",
+    "framer-motion": "^13.4.0",
     "lucide-react": "^0.544.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.18.4"
+    "react-router-dom": "^7.18.4",
+    "three": "^0.186.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.11",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@types/three": "^0.186.0",
     "@vitejs/plugin-react": "^5.0.0",
     "tailwindcss": "^4.1.11",
     "typescript": "~5.8.2",

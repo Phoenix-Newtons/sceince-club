@@ -9,7 +9,7 @@
       content="Nucleus is the BSSM Science Club portal — research projects, lab workshops, star parties and robotics competitions for student scientists."
     />
     <meta name="author" content="Luwangula Alpha" />
-    <meta name="theme-color" content="#4f46e5" />
+    <meta name="theme-color" content="#0B0F19" />
     <title>Nucleus — BSSM Science Club</title>
     <script>
       // Apply the saved theme before first paint to avoid a flash of light mode.
@@ -20,6 +20,11 @@
           }
         } catch (e) {}
       })();
+      // The landing route is a matte-black experience: paint black before React
+      // mounts so the preloader never flashes white on a cold load.
+      if (window.location.pathname === '/') {
+        document.documentElement.style.backgroundColor = '#000000';
+      }
     </script>
   </head>
   <body>
